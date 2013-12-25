@@ -1,0 +1,61 @@
+-- Create table
+create table TRAS_LUCENE_TASK
+(
+  ID          NUMBER,
+  TRAS_ID     VARCHAR2(100),
+  TYPE        NUMBER(1),
+  OPT         NUMBER(1),
+  CREATE_TIME DATE default sysdate,
+  STATUS      NUMBER(1) default 0,
+  HANDLE_TIME DATE
+)
+tablespace LOTTERYBAI
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns
+comment on column TRAS_LUCENE_TASK.ID
+  is 'lucene任务编号';
+comment on column TRAS_LUCENE_TASK.TRAS_ID
+  is '事务编号';
+comment on column TRAS_LUCENE_TASK.TYPE
+  is '类型 ';
+comment on column TRAS_LUCENE_TASK.OPT
+  is '操作类型';
+comment on column TRAS_LUCENE_TASK.CREATE_TIME
+  is '创建时间';
+comment on column TRAS_LUCENE_TASK.STATUS
+  is '0:待处理 1 已处理';
+comment on column TRAS_LUCENE_TASK.HANDLE_TIME
+  is '处理时间';
+
+
+-- 简单语句
+DECLARE
+
+BEGIN
+
+  for v_tras_info_cursor in (select t.tras_id , t.TRAS_TYPE from tras_daily_info t) loop
+    DBMS_OUTPUT.put_line('v_old_vip_level==' || v_tras_info_cursor.tras_id);
+
+    insert into TRAS_LUCENE_TASK
+      (ID, TRAS_ID, TYPE, OPT, CREATE_TIME, STATUS)
+    values
+      (
+        SEQ_TRAS_LUCENE_TASK.NEXTVAL,
+        v_tras_info_cursor.Tras_Id,
+        v_tras_info_cursor.Tras_Type,
+        1,
+        SYSDATE,
+        0
+       );
+  end loop;
+
+END;

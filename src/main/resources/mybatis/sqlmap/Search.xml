@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Search">
+
+    <resultMap id="BaseResultMap" type="com.diyicai.bean.TrasLuceneTask">
+        <result column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="TRAS_ID" property="trasId" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="DECIMAL"/>
+        <result column="OPT" property="opt" jdbcType="DECIMAL"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE"/>
+        <result column="STATUS" property="status" jdbcType="DECIMAL"/>
+        <result column="HANDLE_TIME" property="handleTime" jdbcType="DATE"/>
+    </resultMap>
+
+    <resultMap id="trasInfoMap" type="com.diyicai.bean.TrasDailyInfo">
+        <id column="TRAS_ID" jdbcType="VARCHAR" property="trasId"/>
+        <result column="TRAS_TITLE" jdbcType="VARCHAR" property="trasTitle"/>
+        <result column="TRAS_TYPE" jdbcType="VARCHAR" property="trasType"/>
+        <result column="TRAS_STATUS" jdbcType="VARCHAR" property="trasStatus"/>
+        <result column="START_TIME" jdbcType="DATE" property="startTime"/>
+        <result column="END_TIME" jdbcType="DATE" property="endTime"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="USER_NAME" jdbcType="VARCHAR" property="userName"/>
+        <result column="STATUS" jdbcType="DECIMAL" property="status"/>
+        <result column="TRAS_CONTENT" jdbcType="CLOB" property="trasContent" />
+    </resultMap>
+
+    <!-- 未处理的重建索引列表 -->
+    <select id="getTrasLuceneTasklist" resultMap="BaseResultMap">
+        select  * from TRAS_LUCENE_TASK T where T.status = 0
+    </select>
+
+    <select id="getTrasInfo" parameterType="java.lang.String" resultMap="trasInfoMap">
+        SELECT * FROM TRAS_DAILY_INFO t where t.TRAS_ID = #{trasId}
+    </select>
+
+    <update id="updateTrasLuceneTaskStatus" parameterType="map">
+        update  TRAS_LUCENE_TASK T set T.status = #{status} ,t.Handle_time = sysdate where T.id = #{id}
+    </update>
+
+</mapper>
