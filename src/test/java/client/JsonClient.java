@@ -33,7 +33,7 @@ public class JsonClient {
             byte[] sampleByte = ByteUtil.addBytes(ByteUtil.intTo2Bytes(length), json.getBytes("utf-8"));
             System.out.println(sampleByte.length);
 
-            Socket socket = new Socket("192.168.5.23", 7071);
+            Socket socket = new Socket("127.0.0.1", 7071);
             socket.setKeepAlive(true);
             socket.setTcpNoDelay(true);
             long l1 = System.currentTimeMillis();
